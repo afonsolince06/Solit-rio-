@@ -1,0 +1,30 @@
+<div id="app" class="app">
+  <header class="topbar">
+    <h1 class="title">Solitário da Avó</h1>
+    <div class="status" id="status"></div>
+  </header>
+  <main class="board" id="board" aria-label="Mesa de jogo"></main>
+  <button id="autoBtn" class="auto-btn" type="button" hidden>✓ Concluir o jogo</button>
+  <nav class="toolbar" id="toolbar" aria-label="Botões do jogo">
+    <button type="button" data-act="new">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="11" height="15" rx="2"/><path d="M8 3h9a2 2 0 0 1 2 2v12"/><path d="M8.5 10v5M6 12.5h5"/></svg>
+      <span>Novo jogo</span>
+    </button>
+    <button type="button" data-act="undo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>
+      <span>Anular</span>
+    </button>
+    <button type="button" data-act="hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2.2h5c.1-1 .5-1.7 1.1-2.2A6 6 0 0 0 12 3Z"/></svg>
+      <span>Dica</span>
+    </button>
+    <button type="button" data-act="menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <span>Menu</span>
+    </button>
+  </nav>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div id="overlay" class="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+  <div id="busy" class="busy" hidden><div class="busy-box"><div class="spinner"></div><p id="busyText">A baralhar as cartas…</p></div></div>
+  <div id="win" class="win" hidden></div>
+</div>
