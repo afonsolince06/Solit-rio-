@@ -961,6 +961,18 @@
     if (window.visualViewport) window.visualViewport.addEventListener('resize', onResize);
     window.addEventListener('orientationchange', onResize);
     if (window.ResizeObserver) new ResizeObserver(onResize).observe(boardEl);
+    // Botão «voltar» do Android (versão instalada): fecha o painel aberto em vez de sair do jogo.
+    if (root.classList.contains('standalone') && window.history && history.pushState) {
+      try {
+        history.pushState({ solitarioGuard: 1 }, '');
+        window.addEventListener('popstate', function () {
+          var open = !overlayEl.hidden || !winEl.hidden;
+          if (!overlayEl.hidden) closeSheet();
+          else if (!winEl.hidden) winEl.hidden = true;
+          if (open) history.pushState({ solitarioGuard: 1 }, '');
+        });
+      } catch (e) {}
+    }
     document.addEventListener('visibilitychange', function () { if (document.hidden) saveGame(); });
     window.addEventListener('pagehide', saveGame);
     setInterval(function () {

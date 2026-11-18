@@ -3,7 +3,7 @@
 Paciência (Klondike) para jogar no telemóvel, com cartas e botões grandes, toda em português de Portugal.
 Funciona sem Internet depois de aberta, sem contas, sem anúncios e sem servidor.
 
-## Como pôr o jogo no iPhone da avó (grátis, sem conta para ela)
+## Como pôr o jogo no telemóvel Android da avó (grátis, sem conta para ela)
 
 Este repositório já traz a versão pronta a instalar na pasta `docs/`. Basta ligar o GitHub Pages uma vez:
 
@@ -12,11 +12,17 @@ Este repositório já traz a versão pronta a instalar na pasta `docs/`. Basta l
 3. Em **Branch**, escolha o ramo onde está o jogo (por exemplo `main` ou `claude/laughing-mccarthy-1zpkzg`), a pasta **/docs**, e carregue em **Save**.
 4. Espere 1 a 2 minutos. Aparece um endereço do género `https://O-SEU-NOME.github.io/Solit-rio-/`.
    - O repositório tem de ser **público** para o GitHub Pages ser gratuito.
-5. No iPhone da avó, abra esse endereço no **Safari**.
-6. Toque no botão **Partilhar** (o quadrado com a seta para cima) e escolha **Adicionar ao ecrã principal**.
-7. Aparece um ícone «Solitário» no ecrã do iPhone, como se fosse uma aplicação. Abre em ecrã inteiro e funciona mesmo sem Internet.
+5. No telemóvel da avó, abra esse endereço no **Chrome**.
+6. Toque nos **três pontinhos** (⋮, em cima à direita) e escolha **Instalar aplicação** (em alguns telemóveis aparece **Adicionar ao ecrã principal**). Confirme em **Instalar**.
+   - Às vezes o próprio Chrome mostra em baixo um aviso «Adicionar Solitário ao ecrã principal»: também serve.
+7. Aparece um ícone «Solitário» no ecrã e na lista de aplicações. Abre em ecrã inteiro e funciona mesmo sem Internet.
+   - Na versão instalada, o botão **voltar** do Android fecha os menus em vez de sair do jogo.
 
-O jogo guarda-se sozinho no próprio iPhone (no Safari / na aplicação do ecrã principal). Se o histórico do Safari for apagado, o jogo guardado e as estatísticas também se apagam.
+Num telemóvel Samsung com o navegador **Samsung Internet**: toque em **☰** (em baixo à direita) → **Adicionar página a** → **Ecrã principal**.
+
+No iPhone: abra no **Safari** → **Partilhar** → **Adicionar ao ecrã principal**.
+
+O jogo guarda-se sozinho no próprio telemóvel. Se os dados do site forem apagados no navegador (ou a aplicação for desinstalada), o jogo guardado e as estatísticas também se apagam.
 Não há sincronização entre aparelhos: cada telemóvel tem o seu jogo.
 
 ## O que o jogo tem
