@@ -3,7 +3,7 @@
 :root {
   --felt-1: #217540; --felt-2: #0f4424;
   --card: #fffdf7; --card-edge: #cfc6b2;
-  --red: #c3122f; --black: #1b1b1f;
+  --red: #c4001a; --black: #000;
   --back-1: #1d4f9f; --back-2: #153a78;
   --gold: #ffd24a; --gold-deep: #e0a800;
   --ink: #2a2620; --paper: #fbf7ee; --paper-2: #efe8d8; --muted: #6b6357;
@@ -35,8 +35,8 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
 .app {
   height: 100%; display: flex; flex-direction: column;
-  padding-left: max(6px, env(safe-area-inset-left, 0px));
-  padding-right: max(6px, env(safe-area-inset-right, 0px));
+  padding-left: max(3px, env(safe-area-inset-left, 0px));
+  padding-right: max(3px, env(safe-area-inset-right, 0px));
   position: relative;
 }
 
@@ -96,6 +96,18 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .idx .r { font-family: var(--serif); font-weight: 700; font-size: var(--fi); letter-spacing: -.02em; }
 .idx .r.ten { letter-spacing: -.12em; transform: scaleX(.86); transform-origin: left center; display: inline-block; }
 .idx .s { font-size: calc(var(--fi) * .86); line-height: 1.05; }
+/* Letras fortes para quem vê mal: números grossos sem serifa, contorno escuro nas cartas. */
+:root[data-size="muito"] .idx, :root[data-size="gigante"] .idx { left: calc(var(--cw) * .04); right: calc(var(--cw) * .03); top: 0; }
+:root[data-size="muito"] .idx .r, :root[data-size="gigante"] .idx .r {
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 900; letter-spacing: -.05em;
+  -webkit-text-stroke: .04em currentColor;
+}
+:root[data-size="muito"] .idx .r.ten, :root[data-size="gigante"] .idx .r.ten { letter-spacing: -.1em; transform: scaleX(.74); }
+:root[data-size="gigante"] .idx .s { font-size: calc(var(--fi) * .8); }
+:root[data-size="muito"] .card:not(.red) .idx .s, :root[data-size="gigante"] .card:not(.red) .idx .s { transform: scale(1.18); transform-origin: right top; }
+:root[data-size="muito"] .card .face, :root[data-size="gigante"] .card .face { border: 1.5px solid #6f6656; }
+:root[data-size="gigante"] .mid { top: calc(var(--fi) * 1.05); }
+:root[data-size="gigante"] .mid .pip { font-size: calc(var(--cw) * .7); }
 .mid { position: absolute; left: 0; right: 0; bottom: calc(var(--ch) * .05); top: calc(var(--fi) * 1.25); display: grid; place-items: center; }
 .mid .pip { font-size: calc(var(--cw) * .62); line-height: 1; }
 .mid .pip.ace { font-size: calc(var(--cw) * .78); }
@@ -221,3 +233,4 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 :root[data-anim="reduzidas"] .confetti, :root[data-anim="reduzidas"] .win-box { animation: none; }
 :root[data-anim="reduzidas"] .confetti { display: none; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-anim="normais"]) .confetti { display: none; } }
+:root[data-size="gigante"] .idx .r.ten + .s { font-size: calc(var(--fi) * .66); }

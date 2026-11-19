@@ -9,11 +9,11 @@
   try { reduceMotionOS = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
   var DEFAULTS = {
-    drawCount: 1, newGameType: 'solucao', tapMode: 'auto', cardSize: 'grande', table: 'verde', back: 'azul',
+    drawCount: 1, newGameType: 'solucao', tapMode: 'auto', cardSize: 'gigante', table: 'verde', back: 'azul',
     sound: false, anim: reduceMotionOS ? 'reduzidas' : 'normais', hand: 'direita', showScore: true, showTime: false
   };
   var ALLOWED = {
-    drawCount: [1, 3], newGameType: ['solucao', 'acaso'], tapMode: ['auto', 'escolher'], cardSize: ['normal', 'grande', 'muito'],
+    drawCount: [1, 3], newGameType: ['solucao', 'acaso'], tapMode: ['auto', 'escolher'], cardSize: ['normal', 'grande', 'muito', 'gigante'],
     table: ['verde', 'azul', 'bordo'], back: ['azul', 'vermelho'], sound: [true, false], anim: ['normais', 'reduzidas'],
     hand: ['direita', 'esquerda'], showScore: [true, false], showTime: [true, false]
   };
@@ -76,6 +76,9 @@
     if (data.settings) Object.keys(DEFAULTS).forEach(function (k) {
       if (ALLOWED[k].indexOf(data.settings[k]) >= 0) settings[k] = data.settings[k];
     });
+    // Versão anterior: quem usava cartas grandes passa para o novo tamanho «Gigante».
+    if (data.settings && data.settings.sizeV !== 2 && (settings.cardSize === 'grande' || settings.cardSize === 'muito')) settings.cardSize = 'gigante';
+    settings.sizeV = 2;
     if (data.stats) Object.keys(STATS0).forEach(function (k) {
       var v = data.stats[k];
       if (v === null || (typeof v === 'number' && isFinite(v) && v >= 0)) stats[k] = v;
@@ -189,13 +192,13 @@
 
   function computeDims() {
     var W = boardEl.clientWidth, H = boardEl.clientHeight;
-    var gap = Math.max(3, Math.min(12, Math.round(W * 0.012)));
-    var maxW = { normal: 92, grande: 104, muito: 118 }[settings.cardSize];
+    var gap = Math.max(2, Math.min(10, Math.round(W * 0.007)));
+    var maxW = { normal: 92, grande: 104, muito: 118, gigante: 132 }[settings.cardSize];
     var cw = Math.floor((W - gap * 8) / 7);
     cw = Math.max(28, Math.min(cw, maxW, Math.floor(H / 7.0)));
     var ch = Math.round(cw * 1.4);
-    var fi = Math.max(12, Math.round(cw * { normal: .32, grande: .38, muito: .44 }[settings.cardSize]));
-    var fu = Math.round(fi * 1.22 + cw * 0.05);
+    var fi = Math.max(12, Math.round(cw * { normal: .34, grande: .42, muito: .50, gigante: .60 }[settings.cardSize]));
+    var fu = Math.round(fi * 1.1 + cw * 0.04);
     var fd = Math.max(6, Math.round(ch * 0.12));
     var used = cw * 7 + gap * 6;
     var x0 = Math.round((W - used) / 2);
@@ -804,7 +807,7 @@
       seg('drawCount', 'Modo de jogo', [[1, 'Virar 1 carta'], [3, 'Virar 3 cartas']], 'Muda a partir do próximo jogo.') +
       seg('newGameType', 'Jogos novos', [['solucao', 'Sempre com solução'], ['acaso', 'Totalmente ao acaso']], '«Com solução»: antes de dar as cartas, o jogo confirma que é possível ganhar.') +
       seg('tapMode', 'Ao tocar numa carta', [['auto', 'Vai sozinha'], ['escolher', 'Escolho o destino']], '«Escolho o destino»: toque na carta e depois no sítio para onde a quer levar.') +
-      seg('cardSize', 'Tamanho das letras das cartas', [['normal', 'Normal'], ['grande', 'Grande'], ['muito', 'Muito grande']]) +
+      seg('cardSize', 'Tamanho das letras das cartas', [['normal', 'Normal'], ['grande', 'Grande'], ['muito', 'Muito grande'], ['gigante', 'Gigante']]) +
       seg('table', 'Cor da mesa', [['verde', 'Verde clássico'], ['azul', 'Azul'], ['bordo', 'Bordô']]) +
       seg('back', 'Verso das cartas', [['azul', 'Azul'], ['vermelho', 'Vermelho']]) +
       seg('sound', 'Som', [[true, 'Ligado'], [false, 'Desligado']]) +
@@ -833,6 +836,7 @@
     root.dataset.back = settings.back;
     root.dataset.anim = settings.anim;
     root.dataset.hand = settings.hand;
+    root.dataset.size = settings.cardSize;
     if (game) relayout();
   }
 

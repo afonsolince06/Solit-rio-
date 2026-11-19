@@ -19,7 +19,7 @@
 :root {
   --felt-1: #217540; --felt-2: #0f4424;
   --card: #fffdf7; --card-edge: #cfc6b2;
-  --red: #c3122f; --black: #1b1b1f;
+  --red: #c4001a; --black: #000;
   --back-1: #1d4f9f; --back-2: #153a78;
   --gold: #ffd24a; --gold-deep: #e0a800;
   --ink: #2a2620; --paper: #fbf7ee; --paper-2: #efe8d8; --muted: #6b6357;
@@ -51,8 +51,8 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
 .app {
   height: 100%; display: flex; flex-direction: column;
-  padding-left: max(6px, env(safe-area-inset-left, 0px));
-  padding-right: max(6px, env(safe-area-inset-right, 0px));
+  padding-left: max(3px, env(safe-area-inset-left, 0px));
+  padding-right: max(3px, env(safe-area-inset-right, 0px));
   position: relative;
 }
 
@@ -112,6 +112,18 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .idx .r { font-family: var(--serif); font-weight: 700; font-size: var(--fi); letter-spacing: -.02em; }
 .idx .r.ten { letter-spacing: -.12em; transform: scaleX(.86); transform-origin: left center; display: inline-block; }
 .idx .s { font-size: calc(var(--fi) * .86); line-height: 1.05; }
+/* Letras fortes para quem vê mal: números grossos sem serifa, contorno escuro nas cartas. */
+:root[data-size="muito"] .idx, :root[data-size="gigante"] .idx { left: calc(var(--cw) * .04); right: calc(var(--cw) * .03); top: 0; }
+:root[data-size="muito"] .idx .r, :root[data-size="gigante"] .idx .r {
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 900; letter-spacing: -.05em;
+  -webkit-text-stroke: .04em currentColor;
+}
+:root[data-size="muito"] .idx .r.ten, :root[data-size="gigante"] .idx .r.ten { letter-spacing: -.1em; transform: scaleX(.74); }
+:root[data-size="gigante"] .idx .s { font-size: calc(var(--fi) * .8); }
+:root[data-size="muito"] .card:not(.red) .idx .s, :root[data-size="gigante"] .card:not(.red) .idx .s { transform: scale(1.18); transform-origin: right top; }
+:root[data-size="muito"] .card .face, :root[data-size="gigante"] .card .face { border: 1.5px solid #6f6656; }
+:root[data-size="gigante"] .mid { top: calc(var(--fi) * 1.05); }
+:root[data-size="gigante"] .mid .pip { font-size: calc(var(--cw) * .7); }
 .mid { position: absolute; left: 0; right: 0; bottom: calc(var(--ch) * .05); top: calc(var(--fi) * 1.25); display: grid; place-items: center; }
 .mid .pip { font-size: calc(var(--cw) * .62); line-height: 1; }
 .mid .pip.ace { font-size: calc(var(--cw) * .78); }
@@ -237,6 +249,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 :root[data-anim="reduzidas"] .confetti, :root[data-anim="reduzidas"] .win-box { animation: none; }
 :root[data-anim="reduzidas"] .confetti { display: none; }
 @media (prefers-reduced-motion: reduce) { :root:not([data-anim="normais"]) .confetti { display: none; } }
+:root[data-size="gigante"] .idx .r.ten + .s { font-size: calc(var(--fi) * .66); }
 
 </style>
 </head>
@@ -1024,11 +1037,11 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   try { reduceMotionOS = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
   var DEFAULTS = {
-    drawCount: 1, newGameType: 'solucao', tapMode: 'auto', cardSize: 'grande', table: 'verde', back: 'azul',
+    drawCount: 1, newGameType: 'solucao', tapMode: 'auto', cardSize: 'gigante', table: 'verde', back: 'azul',
     sound: false, anim: reduceMotionOS ? 'reduzidas' : 'normais', hand: 'direita', showScore: true, showTime: false
   };
   var ALLOWED = {
-    drawCount: [1, 3], newGameType: ['solucao', 'acaso'], tapMode: ['auto', 'escolher'], cardSize: ['normal', 'grande', 'muito'],
+    drawCount: [1, 3], newGameType: ['solucao', 'acaso'], tapMode: ['auto', 'escolher'], cardSize: ['normal', 'grande', 'muito', 'gigante'],
     table: ['verde', 'azul', 'bordo'], back: ['azul', 'vermelho'], sound: [true, false], anim: ['normais', 'reduzidas'],
     hand: ['direita', 'esquerda'], showScore: [true, false], showTime: [true, false]
   };
@@ -1091,6 +1104,9 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
     if (data.settings) Object.keys(DEFAULTS).forEach(function (k) {
       if (ALLOWED[k].indexOf(data.settings[k]) >= 0) settings[k] = data.settings[k];
     });
+    // Versão anterior: quem usava cartas grandes passa para o novo tamanho «Gigante».
+    if (data.settings && data.settings.sizeV !== 2 && (settings.cardSize === 'grande' || settings.cardSize === 'muito')) settings.cardSize = 'gigante';
+    settings.sizeV = 2;
     if (data.stats) Object.keys(STATS0).forEach(function (k) {
       var v = data.stats[k];
       if (v === null || (typeof v === 'number' && isFinite(v) && v >= 0)) stats[k] = v;
@@ -1204,13 +1220,13 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
   function computeDims() {
     var W = boardEl.clientWidth, H = boardEl.clientHeight;
-    var gap = Math.max(3, Math.min(12, Math.round(W * 0.012)));
-    var maxW = { normal: 92, grande: 104, muito: 118 }[settings.cardSize];
+    var gap = Math.max(2, Math.min(10, Math.round(W * 0.007)));
+    var maxW = { normal: 92, grande: 104, muito: 118, gigante: 132 }[settings.cardSize];
     var cw = Math.floor((W - gap * 8) / 7);
     cw = Math.max(28, Math.min(cw, maxW, Math.floor(H / 7.0)));
     var ch = Math.round(cw * 1.4);
-    var fi = Math.max(12, Math.round(cw * { normal: .32, grande: .38, muito: .44 }[settings.cardSize]));
-    var fu = Math.round(fi * 1.22 + cw * 0.05);
+    var fi = Math.max(12, Math.round(cw * { normal: .34, grande: .42, muito: .50, gigante: .60 }[settings.cardSize]));
+    var fu = Math.round(fi * 1.1 + cw * 0.04);
     var fd = Math.max(6, Math.round(ch * 0.12));
     var used = cw * 7 + gap * 6;
     var x0 = Math.round((W - used) / 2);
@@ -1819,7 +1835,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
       seg('drawCount', 'Modo de jogo', [[1, 'Virar 1 carta'], [3, 'Virar 3 cartas']], 'Muda a partir do próximo jogo.') +
       seg('newGameType', 'Jogos novos', [['solucao', 'Sempre com solução'], ['acaso', 'Totalmente ao acaso']], '«Com solução»: antes de dar as cartas, o jogo confirma que é possível ganhar.') +
       seg('tapMode', 'Ao tocar numa carta', [['auto', 'Vai sozinha'], ['escolher', 'Escolho o destino']], '«Escolho o destino»: toque na carta e depois no sítio para onde a quer levar.') +
-      seg('cardSize', 'Tamanho das letras das cartas', [['normal', 'Normal'], ['grande', 'Grande'], ['muito', 'Muito grande']]) +
+      seg('cardSize', 'Tamanho das letras das cartas', [['normal', 'Normal'], ['grande', 'Grande'], ['muito', 'Muito grande'], ['gigante', 'Gigante']]) +
       seg('table', 'Cor da mesa', [['verde', 'Verde clássico'], ['azul', 'Azul'], ['bordo', 'Bordô']]) +
       seg('back', 'Verso das cartas', [['azul', 'Azul'], ['vermelho', 'Vermelho']]) +
       seg('sound', 'Som', [[true, 'Ligado'], [false, 'Desligado']]) +
@@ -1848,6 +1864,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
     root.dataset.back = settings.back;
     root.dataset.anim = settings.anim;
     root.dataset.hand = settings.hand;
+    root.dataset.size = settings.cardSize;
     if (game) relayout();
   }
 
