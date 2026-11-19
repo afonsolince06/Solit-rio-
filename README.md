@@ -29,12 +29,12 @@ Não há sincronização entre aparelhos: cada telemóvel tem o seu jogo.
 
 - Regras completas de Klondike: 52 cartas, 7 colunas, monte e desperdício, 4 fundações, Virar 1 ou Virar 3, reciclagem do monte sem baralhar.
 - Baralhar verdadeiramente aleatório (Fisher–Yates com `crypto.getRandomValues`).
-- **Jogos com solução garantida** (opção predefinida): antes de dar as cartas, um resolvedor encontra uma solução e essa solução é confirmada jogada a jogada pelas regras do jogo. Se não conseguir confirmar a tempo, o jogo é dado como «ao acaso» e isso é dito à jogadora.
+- Cada jogo novo é baralhado ao acaso. O Desafio do dia usa um baralho com solução confirmada por um resolvedor (jogada a jogada, pelas regras do jogo).
 - Tocar numa carta move-a sozinha para o melhor sítio; também se pode arrastar; ou escolher «Escolho o destino» nas Definições.
 - Anular sem limite, Dica (sempre uma jogada real), Recomeçar o mesmo jogo, Concluir automaticamente quando todas as cartas estão à vista.
 - Guarda automaticamente o jogo, as definições e as estatísticas.
 - Desafio do dia (o mesmo baralho durante o dia inteiro) com calendário dos dias concluídos.
-- Definições: modo de jogo, tamanho das letras, cor da mesa, verso das cartas, som, animações, mão dominante, pontuação, tempo.
+- Definições: modo de jogo, tamanho das letras (predefinido: «Muito grande»), cor da mesa, verso das cartas, som, animações, mão dominante, pontuação, tempo.
 
 ## Para quem quiser mexer no código
 

@@ -1036,11 +1036,11 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   try { reduceMotionOS = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
   var DEFAULTS = {
-    drawCount: 1, newGameType: 'solucao', tapMode: 'auto', cardSize: 'gigante', table: 'verde', back: 'azul',
+    drawCount: 1, tapMode: 'auto', cardSize: 'muito', table: 'verde', back: 'azul',
     sound: false, anim: reduceMotionOS ? 'reduzidas' : 'normais', hand: 'direita', showScore: true, showTime: false
   };
   var ALLOWED = {
-    drawCount: [1, 3], newGameType: ['solucao', 'acaso'], tapMode: ['auto', 'escolher'], cardSize: ['normal', 'grande', 'muito', 'gigante'],
+    drawCount: [1, 3], tapMode: ['auto', 'escolher'], cardSize: ['normal', 'grande', 'muito', 'gigante'],
     table: ['verde', 'azul', 'bordo'], back: ['azul', 'vermelho'], sound: [true, false], anim: ['normais', 'reduzidas'],
     hand: ['direita', 'esquerda'], showScore: [true, false], showTime: [true, false]
   };
@@ -1103,9 +1103,9 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
     if (data.settings) Object.keys(DEFAULTS).forEach(function (k) {
       if (ALLOWED[k].indexOf(data.settings[k]) >= 0) settings[k] = data.settings[k];
     });
-    // Versão anterior: quem usava cartas grandes passa para o novo tamanho «Gigante».
-    if (data.settings && data.settings.sizeV !== 2 && (settings.cardSize === 'grande' || settings.cardSize === 'muito')) settings.cardSize = 'gigante';
-    settings.sizeV = 2;
+    // Versões anteriores: o tamanho passa uma vez para «Muito grande» (o preferido da avó).
+    if (data.settings && data.settings.sizeV !== 3) settings.cardSize = 'muito';
+    settings.sizeV = 3;
     if (data.stats) Object.keys(STATS0).forEach(function (k) {
       var v = data.stats[k];
       if (v === null || (typeof v === 'number' && isFinite(v) && v >= 0)) stats[k] = v;
@@ -1720,9 +1720,8 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
     ui.busy = true;
     try {
       var drawCount = settings.drawCount;
-      var deal = await makeDeal(settings.newGameType, drawCount);
+      var deal = await makeDeal('acaso', drawCount);
       startGame(deal, drawCount);
-      if (settings.newGameType === 'solucao' && !deal.solvable) toast('Desta vez não consegui confirmar a solução. Este jogo é ao acaso.', 4500);
     } finally { ui.busy = false; updateStatus(); }
   }
 
@@ -1832,7 +1831,6 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
     var startDraw = settings.drawCount;
     var html = head('Definições') +
       seg('drawCount', 'Modo de jogo', [[1, 'Virar 1 carta'], [3, 'Virar 3 cartas']], 'Muda a partir do próximo jogo.') +
-      seg('newGameType', 'Jogos novos', [['solucao', 'Sempre com solução'], ['acaso', 'Totalmente ao acaso']], '«Com solução»: antes de dar as cartas, o jogo confirma que é possível ganhar.') +
       seg('tapMode', 'Ao tocar numa carta', [['auto', 'Vai sozinha'], ['escolher', 'Escolho o destino']], '«Escolho o destino»: toque na carta e depois no sítio para onde a quer levar.') +
       seg('cardSize', 'Tamanho das letras das cartas', [['normal', 'Normal'], ['grande', 'Grande'], ['muito', 'Muito grande'], ['gigante', 'Gigante']]) +
       seg('table', 'Cor da mesa', [['verde', 'Verde clássico'], ['azul', 'Azul'], ['bordo', 'Bordô']]) +
